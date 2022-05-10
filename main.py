@@ -1,4 +1,5 @@
 import sys, pygame
+from enemy import Enemy
 from player import Player
 
 
@@ -23,7 +24,11 @@ if __name__ == "__main__":
     font = pygame.font.SysFont("Arial", 18)
 
     # initialize player
-    player = Player()
+    player = Player(screen)
+    enemies = []
+
+    # spawn a singel enemy for testing
+    enemies.append(Enemy(100,100,1,1,25,(255,0,0), player))
         
     # main loop
     done = False
@@ -35,10 +40,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             handle_exit_event(event)
             
-        # update
+        # update player
         player.movement_event(event)
         player.update()
         player.display(screen, 30, player.angle)
+
+        # update enemies
+        for enemy in enemies:
+            enemy.update()
+            enemy.display(screen)
         
         # Drawing FPS
         fps_text = update_fps()
