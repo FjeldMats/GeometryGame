@@ -18,9 +18,9 @@ class Player:
         
     def update(self):
         if self.angle_direction == 1:
-            self.angle_velocity = 1
+            self.angle_velocity = 3
         elif self.angle_direction == -1:
-            self.angle_velocity = -1
+            self.angle_velocity = -3
         else:
             self.angle_velocity = 0
         
@@ -31,11 +31,11 @@ class Player:
         width, height = screen.get_size()
 
         center = ((width//2), (height//2))
-        aim_loc = ((center[0] + sin(radians(angle)) * (size*3)), (center[1] + cos(radians(angle)) * (size*3)))
+        aim_loc = ((center[0] + sin(radians(angle)) * (size*1.5)), (center[1] + cos(radians(angle)) * (size*1.5)))
 
-        screen.blit(pygame.font.SysFont("Arial", 18).render("Aiming at: " + str(aim_loc) + "angle" + str(angle), 1, pygame.Color("coral")), (0,25))
+        screen.blit(pygame.font.SysFont("Arial", 10).render(f"angle {angle}", 1, pygame.Color("coral")), (0,20))
 
-        pygame.draw.rect(screen, (255,255,255), pygame.Rect((width//2) - size, (height//2) - size, size, size))
+        pygame.draw.rect(screen, (255,255,255), pygame.Rect((width//2) - (size//2), (height//2) - (size//2), size, size))
 
         # draw aiming line
-        pygame.draw.line(screen, (255,255,255), center, aim_loc, 2)
+        pygame.draw.line(screen, (255,255,255), center, aim_loc, 5)
