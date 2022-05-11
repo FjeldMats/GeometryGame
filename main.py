@@ -1,3 +1,4 @@
+import random
 import sys, pygame
 from enemy import Enemy
 from player import Player
@@ -23,12 +24,14 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Arial", 18)
 
+
+    score = 0
+
+    last_enemy_spawn = pygame.time.get_ticks()
+
     # initialize player
     player = Player(screen)
     enemies = []
-
-    # spawn a singel enemy for testing
-    enemies.append(Enemy(100,100,1,1,25,(255,0,0), player))
         
     # main loop
     done = False
@@ -44,6 +47,33 @@ if __name__ == "__main__":
         player.movement_event(event)
         player.update()
         player.display(screen, 30, player.angle)
+
+        # check if bullet hits enemy
+        for enemy in enemies:
+            for bullet in player.bullets:
+                bullet.hit_check(enemy)
+        
+        # remove dead enemies
+        for enemy in enemies:
+            if enemy.hp <= 0:
+                enemies.remove(enemy)
+        
+        # remove all bullets that hit an enemy
+        for bullet in player.bullets:
+            if bullet.hit:
+                player.bullets.remove(bullet)
+
+        #spawn enemies
+        now = pygame.time.get_ticks()
+        if len(enemies) < 2 and last_enemy_spawn - now < 60*5:
+
+            
+            # spawn enemy random location off screen
+            x = random.randint(0, width)
+            y = random.randint(0, height)
+            
+            enemies.append(Enemy(x,y,100,1,25,(255,0,0), player))
+            last_enemy_spawn = pygame.time.get_ticks()
 
         # update enemies
         for enemy in enemies:
