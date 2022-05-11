@@ -26,6 +26,8 @@ if __name__ == "__main__":
 
 
     score = 0
+    enemy_spawn_cooldown = 5000
+    player_gun_cooldown = 100
 
     last_enemy_spawn = pygame.time.get_ticks()
 
@@ -44,7 +46,7 @@ if __name__ == "__main__":
             handle_exit_event(event)
             
         # update player
-        player.movement_event(event)
+        player.movement_event(event, player_gun_cooldown)
         player.update()
         player.display(screen, 30, player.angle)
 
@@ -65,13 +67,12 @@ if __name__ == "__main__":
 
         #spawn enemies
         now = pygame.time.get_ticks()
-        if len(enemies) < 2 and last_enemy_spawn - now < 60*5:
+        if now - last_enemy_spawn > enemy_spawn_cooldown:
 
-            
-            # spawn enemy random location off screen
-            x = random.randint(0, width)
-            y = random.randint(0, height)
-            
+            # spawn enemy with min 500 px distance from player
+            x = random.randint(player.x - 500, player.x + 500)
+            y = random.randint(player.y - 500, player.y + 500)
+
             enemies.append(Enemy(x,y,100,1,25,(255,0,0), player))
             last_enemy_spawn = pygame.time.get_ticks()
 
@@ -80,9 +81,11 @@ if __name__ == "__main__":
             enemy.update()
             enemy.display(screen)
         
-        # Drawing FPS
+        # Drawing FPS and ticks
         fps_text = update_fps()
         screen.blit(fps_text, (0,0))
+        screen.blit(font.render(str(pygame.time.get_ticks()), 1, pygame.Color("coral")), (40,0))
+        screen.blit(font.render(str(now - last_enemy_spawn), 1, pygame.Color("coral")), (100,0))
 
         # Update the screen
         pygame.display.flip()

@@ -9,6 +9,7 @@ class Player:
         self.angle_velocity = 0
         self.angle_direction = 0 # 0 = no movement
         self.bullets = []
+        self.last_shot = 0
 
         width, height = screen.get_size()
         self.x = width//2
@@ -17,7 +18,7 @@ class Player:
         self.aim_x = None
         self.aim_y = None
 
-    def movement_event(self, event):
+    def movement_event(self, event, gun_cooldown):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:
             self.angle_direction = 1
@@ -27,7 +28,9 @@ class Player:
             self.angle_direction = 0
 
         if keys[pygame.K_SPACE]:
-            self.bullets.append(Bullet(self.aim_x,self.aim_y,self.angle,self))
+            if pygame.time.get_ticks() - self.last_shot > gun_cooldown:
+                self.bullets.append(Bullet(self.aim_x,self.aim_y,self.angle,self))
+                self.last_shot = pygame.time.get_ticks()
         
     def update(self):
         if self.angle_direction == 1:
