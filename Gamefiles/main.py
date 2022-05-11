@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # initialize pygame
     pygame.init()
     size = width, height = 854, 480
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
     pygame.display.set_caption("GeometryGame")
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Arial", 18)
@@ -44,6 +44,13 @@ if __name__ == "__main__":
         # event handling
         for event in pygame.event.get():
             handle_exit_event(event)
+
+            if event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                player.resize(event.w, event.h)
+
+            elif event.type == pygame.FULLSCREEN:
+                screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
             
         # update player
         player.movement_event(event, player_gun_cooldown)
