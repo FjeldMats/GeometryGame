@@ -18,6 +18,11 @@ class Player:
         self.aim_x = None
         self.aim_y = None
 
+    def resize(self, width, height):
+        self.x = width//2
+        self.y = height//2
+
+
     def movement_event(self, event, gun_cooldown):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:

@@ -1,3 +1,4 @@
+import os
 import random
 import sys, pygame
 from enemy import Enemy
@@ -26,8 +27,8 @@ if __name__ == "__main__":
 
 
     score = 0
-    enemy_spawn_cooldown = 5000
-    player_gun_cooldown = 100
+    enemy_spawn_cooldown = 4000
+    player_gun_cooldown = 500
 
     last_enemy_spawn = pygame.time.get_ticks()
 
@@ -66,6 +67,7 @@ if __name__ == "__main__":
         for enemy in enemies:
             if enemy.hp <= 0:
                 enemies.remove(enemy)
+                score += 1
         
         # remove all bullets that hit an enemy
         for bullet in player.bullets:
@@ -77,11 +79,20 @@ if __name__ == "__main__":
         if now - last_enemy_spawn > enemy_spawn_cooldown:
 
             # spawn enemy with min 500 px distance from player
-            x = random.randint(player.x - 500, player.x + 500)
-            y = random.randint(player.y - 500, player.y + 500)
+            distance = 0
+            x = 0
+            y = 0
+            while distance < 500:
+                x = random.randint(player.x - 700, player.x + 700)
+                y = random.randint(player.y - 700, player.y + 700)
+                distance = abs(((x - player.x)**2 + (y - player.y)**2)**0.5)
 
-            enemies.append(Enemy(x,y,100,1,25,(255,0,0), player))
+
+            size  = random.randint(25, 100)
+            enemies.append(Enemy(x,y,size*5,15/size,size,(255,0,0), player))
             last_enemy_spawn = pygame.time.get_ticks()
+
+            enemy_spawn_cooldown = random.randint(2000, 6000)
 
         # update enemies
         for enemy in enemies:

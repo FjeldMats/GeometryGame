@@ -17,12 +17,11 @@ class Bullet:
 
     def display(self, screen):
         if not self.hit:
-            pygame.draw.circle(screen, (255,255,255), (self.x, self.y), 5)
+            pygame.draw.circle(screen, (255,255,255), (self.x, self.y), 10)
 
-    #TODO: add hit detection
     def hit_check(self, enemy):
         if self.x > enemy.x - enemy.size and self.x < enemy.x + enemy.size:
             if self.y > enemy.y - enemy.size and self.y < enemy.y + enemy.size:
                 self.hit = True
-                enemy.hp -= 10
+                enemy.hp -= 50
                 self.hit=True
