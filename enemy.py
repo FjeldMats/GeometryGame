@@ -13,25 +13,23 @@ class Enemy():
         self.target = target
     
     def update(self):
-        # get angle to target
-        angle = self.get_angle_to_target()
-
-        # move in direction of angle
-        self.x += self.speed * sin(radians(angle))
-        self.y += self.speed * cos(radians(angle))
-
-
-    #TODO: find why its not moving to player 
+        self.x += self.speed * sin(self.get_angle_to_target())
+        self.y += self.speed * cos(self.get_angle_to_target())
+        
     def get_angle_to_target(self):
-        # get angle to target
-        return atan2(self.target.y - self.y, self.target.x - self.x)  * 180 / 3.14159265359
+        return atan2(self.target.x - self.x, self.target.y - self.y)
 
 
     def display(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
 
-        #draw aiming line 
-        pygame.draw.line(screen, (255,255,255), (self.x, self.y), (self.x + sin(radians(self.get_angle_to_target())) * (self.size*1.5), self.y + cos(radians(self.get_angle_to_target())) * (self.size*1.5)), 5)
+        pygame.draw.line(screen, (255,255,255), (self.x, self.y), (self.x + sin(self.get_angle_to_target()) * (self.size*1.5), self.y + cos(self.get_angle_to_target()) * (self.size*1.5)), 5)
+
+        # draw line from enemy to target
+        pygame.draw.line(screen, (255,255,255), (self.x, self.y), (self.target.x, self.target.y), 1)
+
+        # draw remaning hp text
+        screen.blit(pygame.font.SysFont("Arial", 13).render(f"hp {self.hp}", 1, (255,255,255)), (self.x - self.size, self.y - self.size))
 
 
 
