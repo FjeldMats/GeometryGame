@@ -30,6 +30,15 @@ class Enemy():
 
         # draw remaning hp text
         screen.blit(pygame.font.SysFont("Arial", 13).render(f"hp {self.hp}", 1, (255,255,255)), (self.x - self.size, self.y - self.size))
+    
+    def distance_to(self, player):
+        return ((self.x - player.x) ** 2 + (self.y - player.y) ** 2) ** 0.5
+
+    def hit_check(self, player):
+        if self.distance_to(player) < player.size + self.size:
+            self.hp -= 50
+            return True
+        return False
 
 
 
