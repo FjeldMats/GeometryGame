@@ -58,9 +58,10 @@ class Player:
             self.rel_x_direction = 1
         else:
             self.rel_x_direction = 0
-            
+        
+        left, middle, right = pygame.mouse.get_pressed()
 
-        if keys[pygame.K_SPACE]:
+        if left or right:
             if pygame.time.get_ticks() - self.last_shot > gun_cooldown:
                 self.bullets.append(Bullet(self.aim_x,self.aim_y,self.angle,self))
                 self.last_shot = pygame.time.get_ticks()

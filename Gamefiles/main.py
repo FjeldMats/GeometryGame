@@ -1,6 +1,6 @@
-import os
 import random
 import sys, pygame
+from randomGeneratedBackground import randomGeneratedBackground
 from enemy import Enemy
 from player import Player
 
@@ -28,19 +28,25 @@ if __name__ == "__main__":
 
     score = 0
     enemy_spawn_cooldown = 4000
-    player_gun_cooldown = 500
+    player_gun_cooldown = 100
 
     last_enemy_spawn = pygame.time.get_ticks()
 
     # initialize player
     player = Player(screen,30)
     enemies = []
+
+    # initialize background
+    background = randomGeneratedBackground(width, height, pygame.Color("white"))
         
     # main loop
     done = False
     while not done:
         clock.tick(60)
+
+        # fill bacground
         screen.fill((0,0,0))
+        background.display(screen)
         
         # event handling
         for event in pygame.event.get():
@@ -49,26 +55,25 @@ if __name__ == "__main__":
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 player.resize(event.w, event.h)
+                background.resize(event.w, event.h)
 
             elif event.type == pygame.FULLSCREEN:
                 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
             
             width, height = screen.get_size()
-            
+        
+        # set mouse visibility
+        pygame.mouse.set_visible(False)
+
         # update player
         player.movement_event(event, player_gun_cooldown)
         player.update()
 
-        # aim player at nearest enemy
-        if len(enemies) > 0:
-            nearest_enemy = enemies[0]
-            for enemy in enemies:
-                if enemy.distance_to(player) < nearest_enemy.distance_to(player):
-                    nearest_enemy = enemy
-            player.aim(nearest_enemy.x, nearest_enemy.y)
-            
-            #draw red line from player to nearest enemy
-            pygame.draw.line(screen, pygame.Color("red"), (player.x, player.y), (nearest_enemy.x, nearest_enemy.y), 2)
+        mouse_pos = pygame.mouse.get_pos()
+     
+        player.aim(mouse_pos[0], mouse_pos[1])
+        pygame.draw.line(screen, pygame.Color("red"), (player.x, player.y), (mouse_pos[0],  mouse_pos[1]), 2)
+
 
         #spawn enemies
         now = pygame.time.get_ticks()
@@ -115,6 +120,7 @@ if __name__ == "__main__":
         # update display
         player.display(screen)
 
+        background.update(player, screen)
 
         # update everything relative to player movment
         for enemy in enemies:

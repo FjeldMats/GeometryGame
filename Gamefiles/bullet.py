@@ -23,5 +23,5 @@ class Bullet:
         if self.x > enemy.x - enemy.size and self.x < enemy.x + enemy.size:
             if self.y > enemy.y - enemy.size and self.y < enemy.y + enemy.size:
                 self.hit = True
-                enemy.hp -= 50
+                enemy.hp -= 10
                 self.hit=True
