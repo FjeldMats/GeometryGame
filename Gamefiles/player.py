@@ -41,6 +41,9 @@ class Player:
         self.x = width//2
         self.y = height//2
 
+        self.hpBar.x = 25 
+        self.hpBar.y = height - 20
+
     def aim(self, x, y):
         self.angle = atan2(x - self.x, y - self.y) * 180 / pi
 
