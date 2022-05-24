@@ -106,6 +106,10 @@ if __name__ == "__main__":
         # check for collisions
         for enemy in enemies:
             if enemy.hit_check(player):
+                player.hpBar.update(player.hpBar.value - 50)
+
+            if player.hpBar.value <= 0:
+                done = True
                 print(f"GAME OVER - Score: {score}")
                 sys.exit()
 
@@ -178,13 +182,9 @@ if __name__ == "__main__":
             enemy.update()
             enemy.display(screen)
 
-        # Drawing FPS and ticks
+        # Drawing FPS sd ticks
         fps_text = update_fps()
         screen.blit(fps_text, (0, 0))
-        screen.blit(font.render(str(pygame.time.get_ticks()),
-                    1, pygame.Color("coral")), (40, 0))
-        screen.blit(font.render(str(now - last_enemy_spawn),
-                    1, pygame.Color("coral")), (100, 0))
 
         # Update the screen
         pygame.display.flip()

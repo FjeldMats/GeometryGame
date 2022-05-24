@@ -1,5 +1,6 @@
 import pygame
 from math import atan2, cos, pi, radians, sin
+from bar import Bar
 
 from bullet import Bullet
 
@@ -31,6 +32,10 @@ class Player:
 
         self.rel_x_direction = 0
         self.rel_y_direction = 0
+
+        # init hp bar
+        self.hpBar = Bar(25, screen.get_size()[1] - 20, screen.get_size()[1]//3 , 10, (255, 255, 255), 1000, 1000)
+
 
     def resize(self, width, height):
         self.x = width//2
@@ -84,14 +89,12 @@ class Player:
 
         self.rel_x += self.rel_x_velocity * self.player_speed
         self.rel_y += self.rel_y_velocity * self.player_speed
+    
 
     def display(self, screen):
 
         self.aim_x = self.x + sin(radians(self.angle)) * (self.size*1.5)
         self.aim_y = self.y + cos(radians(self.angle)) * (self.size*1.5)
-
-        screen.blit(pygame.font.SysFont("Arial", 10).render(
-            f"angle {self.angle}", 1, pygame.Color("coral")), (0, 20))
 
         pygame.draw.rect(screen, (255, 255, 255), pygame.Rect((screen.get_size()[
                          0]//2) - (self.size//2), (screen.get_size()[1]//2) - (self.size//2), self.size, self.size))
@@ -99,6 +102,12 @@ class Player:
         # draw aiming line
         pygame.draw.line(screen, (255, 255, 255),
                          (self.x, self.y), (self.aim_x, self.aim_y), 5)
+        
+
+        # draw hp bar
+        self.hpBar.display(screen)
+        
+
 
         for bullet in self.bullets:
             bullet.update()
